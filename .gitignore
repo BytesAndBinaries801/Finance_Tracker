@@ -1,0 +1,10 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local data backups — keep these out of version control unless you
+# deliberately want a versioned copy of your real numbers in this repo.
+data/
+*.json
+!package.json
