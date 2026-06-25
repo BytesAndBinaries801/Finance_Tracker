@@ -1,6 +1,12 @@
-# Flat purchase checklist
+# Flat purchase planner
 
-A single-page checklist for due diligence before buying a flat. Checks are saved in the browser via localStorage, so progress persists between visits on the same device.
+A single-page site with three sheets:
+
+- **Dashboard** — live summary of your loan numbers and checklist progress
+- **Loan calculator** — property price, down payment, tenure, rate, and an extra-annual-prepayment slider that shows how much earlier the loan closes and how much interest you save
+- **Checklist** — 44-point due-diligence checklist for buying a flat
+
+Checklist checks are saved in the browser via localStorage, so progress persists between visits on the same device.
 
 ## Host it on GitHub Pages
 

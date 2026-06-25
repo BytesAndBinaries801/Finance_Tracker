@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flat purchase checklist — Chennai</title>
-<meta name="description" content="A due-diligence checklist for buying a flat, organised like an architectural drawing set.">
+<title>Flat purchase planner — Chennai</title>
+<meta name="description" content="A dashboard, loan/prepayment calculator and due-diligence checklist for buying a flat.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,6 +19,8 @@
     --ink-dim:#8FB0C2;
     --accent:#E2682F;
     --accent-dim:rgba(226,104,47,0.16);
+    --accent2:#5DBE8A;
+    --accent2-dim:rgba(93,190,138,0.16);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -33,250 +35,127 @@
     font-family:'IBM Plex Sans', sans-serif;
     line-height:1.6;
   }
-  .wrap{
-    max-width:880px;
-    margin:0 auto;
-    padding:32px 20px 80px;
-  }
+  .wrap{ max-width:920px; margin:0 auto; padding:32px 20px 80px; }
+
   /* ---------- Title block ---------- */
-  .titleblock{
-    border:1.5px solid var(--line-strong);
-    background:var(--surface);
-    margin-bottom:36px;
-  }
-  .titleblock-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    border-top:1px solid var(--line);
-  }
+  .titleblock{ border:1.5px solid var(--line-strong); background:var(--surface); margin-bottom:24px; }
+  .titleblock-row{ display:grid; grid-template-columns:1fr 1fr 1fr; border-top:1px solid var(--line); }
   .titleblock-row:first-child{border-top:none;}
-  .tb-cell{
-    padding:10px 14px;
-    border-right:1px solid var(--line);
-  }
+  .tb-cell{ padding:10px 14px; border-right:1px solid var(--line); }
   .tb-cell:last-child{border-right:none;}
-  .tb-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:0.08em;
-    color:var(--ink-dim);
-    text-transform:uppercase;
-    margin:0 0 4px;
+  .tb-label{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.08em; color:var(--ink-dim); text-transform:uppercase; margin:0 0 4px; }
+  .tb-value{ font-size:14px; margin:0; }
+  .tb-hero{ padding:20px 14px; }
+  .tb-hero h1{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:28px; letter-spacing:-0.01em; margin:0 0 6px; }
+  .tb-hero p{ font-size:14px; color:var(--ink-dim); margin:0; max-width:580px; }
+
+  /* ---------- Sheet index / tab nav ---------- */
+  .sheet-index{ display:flex; border:1.5px solid var(--line-strong); background:var(--surface); margin-bottom:24px; overflow-x:auto; }
+  .sheet-index button{
+    flex:1; min-width:140px; padding:12px 14px; background:transparent; border:none; border-right:1px solid var(--line);
+    color:var(--ink-dim); font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.05em; text-transform:uppercase;
+    cursor:pointer; text-align:left;
   }
-  .tb-value{
-    font-size:14px;
-    margin:0;
+  .sheet-index button:last-child{border-right:none;}
+  .sheet-index button span{ display:block; font-family:'Space Grotesk', sans-serif; font-size:14px; text-transform:none; letter-spacing:0; color:var(--ink); margin-top:2px; }
+  .sheet-index button.active{ background:var(--accent-dim); color:var(--accent); }
+  .sheet-index button.active span{ color:var(--ink); }
+  .sheet-index button:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  /* ---------- Generic panel/sheet card ---------- */
+  .card{ border:1px solid var(--line-strong); background:var(--surface); margin-bottom:20px; position:relative; overflow:hidden; }
+  .card-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+  .card-id{ display:flex; align-items:baseline; gap:10px; }
+  .card-num{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--accent); letter-spacing:0.06em; }
+  .card-title{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:16px; margin:0; }
+  .card-tally{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim); white-space:nowrap; }
+  .card-body{ padding:16px; }
+
+  /* ---------- Metric cards (dashboard) ---------- */
+  .metric-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px; }
+  .metric{ background:var(--surface-2); border:1px solid var(--line); padding:14px; }
+  .metric .m-label{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-dim); margin:0 0 6px; }
+  .metric .m-value{ font-family:'Space Grotesk', sans-serif; font-size:22px; font-weight:700; margin:0; }
+  .metric.accent{ background:var(--accent-dim); border-color:var(--accent); }
+  .metric.accent .m-value{ color:var(--accent); }
+  .metric.green{ background:var(--accent2-dim); border-color:var(--accent2); }
+  .metric.green .m-value{ color:var(--accent2); }
+
+  /* ---------- Ruler / progress bars ---------- */
+  .ruler-row{ margin-top:14px; }
+  .ruler-top{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+  .ruler-label{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em; color:var(--ink-dim); text-transform:uppercase; }
+  .ruler-count{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:15px; }
+  .ruler{ position:relative; height:14px; border:1px solid var(--line-strong); background:transparent; overflow:hidden; }
+  .ruler-fill{ position:absolute; inset:0; width:0%; background:var(--accent); transition:width 0.3s ease; }
+  .ruler-fill.green{ background:var(--accent2); }
+  .ruler::after{ content:""; position:absolute; inset:0; background-image:repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 5%); pointer-events:none; }
+
+  /* ---------- Sliders ---------- */
+  .mode-toggle{ display:flex; gap:0; border:1px solid var(--line-strong); margin-bottom:14px; width:fit-content; }
+  .mode-btn{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase;
+    color:var(--ink-dim); background:transparent; border:none; border-right:1px solid var(--line-strong);
+    padding:8px 14px; cursor:pointer;
   }
-  .tb-hero{
-    padding:20px 14px;
-  }
-  .tb-hero h1{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:28px;
-    letter-spacing:-0.01em;
-    margin:0 0 6px;
-  }
-  .tb-hero p{
-    font-size:14px;
-    color:var(--ink-dim);
-    margin:0;
-    max-width:540px;
-  }
-  /* progress / scale ruler */
-  .ruler-row{padding:16px 14px 18px;}
-  .ruler-top{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    margin-bottom:8px;
-  }
-  .ruler-label{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:10.5px;
-    letter-spacing:0.08em;
-    color:var(--ink-dim);
-    text-transform:uppercase;
-  }
-  .ruler-count{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:18px;
-    color:var(--accent);
-  }
-  .ruler{
-    position:relative;
-    height:14px;
-    border:1px solid var(--line-strong);
-    background:transparent;
-    overflow:hidden;
-  }
-  .ruler-fill{
-    position:absolute;
-    inset:0;
-    width:0%;
-    background:var(--accent);
-    transition:width 0.4s ease;
-  }
-  .ruler::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background-image:repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 5%);
-    pointer-events:none;
-  }
-  /* ---------- Sheets ---------- */
-  .sheet{
-    border:1px solid var(--line-strong);
-    background:var(--surface);
-    margin-bottom:22px;
-    position:relative;
-    overflow:hidden;
-  }
-  .sheet-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-    padding:14px 16px;
-    border-bottom:1px solid var(--line);
-    background:var(--surface-2);
-  }
-  .sheet-id{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-  }
-  .sheet-num{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    color:var(--accent);
-    letter-spacing:0.06em;
-  }
-  .sheet-title{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:16px;
-    margin:0;
-  }
-  .sheet-tally{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:12px;
-    color:var(--ink-dim);
-    white-space:nowrap;
-  }
-  .sheet-body{
-    padding:6px 16px 10px;
-  }
-  .item{
-    display:flex;
-    align-items:flex-start;
-    gap:12px;
-    padding:10px 0;
-    border-bottom:1px solid var(--line);
-  }
+  .mode-btn:last-child{ border-right:none; }
+  .mode-btn.active{ background:var(--accent-dim); color:var(--accent); }
+  .mode-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:-2px; }
+
+  .slider-row{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .slider-row label{ font-size:13px; color:var(--ink-dim); width:170px; flex-shrink:0; }
+  .slider-row input[type="range"]{ flex:1; accent-color:var(--accent); }
+  .slider-row .out{ font-family:'Space Grotesk', sans-serif; font-size:14px; font-weight:700; min-width:90px; text-align:right; }
+  .hint{ font-size:12.5px; color:var(--ink-dim); margin:-4px 0 16px; }
+
+  /* ---------- Checklist items ---------- */
+  .item{ display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
   .item:last-child{border-bottom:none;}
   .item input[type="checkbox"]{
-    appearance:none;
-    -webkit-appearance:none;
-    width:18px;
-    height:18px;
-    flex-shrink:0;
-    margin-top:2px;
-    border:1.5px solid var(--ink-dim);
-    background:transparent;
-    cursor:pointer;
-    position:relative;
+    appearance:none; -webkit-appearance:none; width:18px; height:18px; flex-shrink:0; margin-top:2px;
+    border:1.5px solid var(--ink-dim); background:transparent; cursor:pointer; position:relative;
   }
-  .item input[type="checkbox"]:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:2px;
-  }
-  .item input[type="checkbox"]:checked{
-    background:var(--accent);
-    border-color:var(--accent);
-  }
+  .item input[type="checkbox"]:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .item input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent); }
   .item input[type="checkbox"]:checked::after{
-    content:"";
-    position:absolute;
-    left:5px;
-    top:1px;
-    width:5px;
-    height:9px;
-    border:solid var(--bg);
-    border-width:0 2px 2px 0;
-    transform:rotate(40deg);
+    content:""; position:absolute; left:5px; top:1px; width:5px; height:9px;
+    border:solid var(--bg); border-width:0 2px 2px 0; transform:rotate(40deg);
   }
-  .item label{
-    cursor:pointer;
-    font-size:14.5px;
-  }
-  .item.checked label{
-    color:var(--ink-dim);
-    text-decoration:line-through;
-    text-decoration-color:var(--line-strong);
-  }
-  /* stamp */
+  .item label{ cursor:pointer; font-size:14.5px; }
+  .item.checked label{ color:var(--ink-dim); text-decoration:line-through; text-decoration-color:var(--line-strong); }
+
   .stamp{
-    position:absolute;
-    top:14px;
-    right:16px;
-    font-family:'Space Grotesk', sans-serif;
-    font-weight:700;
-    font-size:13px;
-    letter-spacing:0.12em;
-    color:var(--accent);
-    border:2px solid var(--accent);
-    padding:3px 10px;
-    transform:rotate(-8deg) scale(0.85);
-    opacity:0;
-    transition:opacity 0.3s ease, transform 0.3s ease;
-    pointer-events:none;
-    background:var(--accent-dim);
+    position:absolute; top:14px; right:16px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:13px;
+    letter-spacing:0.12em; color:var(--accent); border:2px solid var(--accent); padding:3px 10px;
+    transform:rotate(-8deg) scale(0.85); opacity:0; transition:opacity 0.3s ease, transform 0.3s ease;
+    pointer-events:none; background:var(--accent-dim);
   }
-  .sheet.complete .stamp{
-    opacity:1;
-    transform:rotate(-8deg) scale(1);
-  }
-  @media (prefers-reduced-motion: reduce){
-    .ruler-fill, .stamp{transition:none;}
-    html{scroll-behavior:auto;}
-  }
-  /* footer */
-  .foot{
-    margin-top:32px;
-    padding-top:16px;
-    border-top:1px solid var(--line);
-    font-size:12.5px;
-    color:var(--ink-dim);
-    display:flex;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-  .foot button{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:0.04em;
-    color:var(--ink-dim);
-    background:transparent;
-    border:1px solid var(--line-strong);
-    padding:6px 12px;
-    cursor:pointer;
-  }
-  .foot button:hover{
-    color:var(--ink);
-    border-color:var(--ink-dim);
-  }
-  .foot button:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:2px;
-  }
+  .card.complete .stamp{ opacity:1; transform:rotate(-8deg) scale(1); }
+
+  @media (prefers-reduced-motion: reduce){ .ruler-fill, .stamp{transition:none;} html{scroll-behavior:auto;} }
+
+  .foot{ margin-top:24px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-dim); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .foot button{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.04em; color:var(--ink-dim); background:transparent; border:1px solid var(--line-strong); padding:6px 12px; cursor:pointer; }
+  .foot button:hover{ color:var(--ink); border-color:var(--ink-dim); }
+  .foot button:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+  .compare-block{ margin-top:18px; }
+  .compare-row{ margin-bottom:14px; }
+  .compare-row .ruler-label{ display:flex; justify-content:space-between; }
+
   @media (max-width:620px){
     .titleblock-row{grid-template-columns:1fr;}
     .tb-cell{border-right:none; border-top:1px solid var(--line);}
     .tb-cell:first-child{border-top:none;}
-    .sheet-header{flex-wrap:wrap;}
+    .card-header{flex-wrap:wrap;}
+    .slider-row{flex-wrap:wrap;}
+    .slider-row label{width:100%;}
+    .slider-row .out{width:100%; text-align:left;}
+    .sheet-index{flex-wrap:wrap;}
+    .sheet-index button{min-width:48%;}
   }
 </style>
 </head>
@@ -285,46 +164,302 @@
 
   <div class="titleblock">
     <div class="tb-hero">
-      <h1>Flat purchase checklist</h1>
-      <p>Forty-four checks across seven sheets, covering title, builder, financials, construction, location, paperwork and possession — written for a Chennai / OMR purchase, applicable to any city.</p>
+      <h1>Flat purchase planner</h1>
+      <p>Dashboard, loan / prepayment calculator and a 44-point due-diligence checklist — written for a Chennai / OMR purchase, applicable to any city.</p>
     </div>
     <div class="titleblock-row">
-      <div class="tb-cell">
-        <p class="tb-label">Location</p>
-        <p class="tb-value">Chennai · OMR corridor</p>
+      <div class="tb-cell"><p class="tb-label">Location</p><p class="tb-value">Chennai · OMR corridor</p></div>
+      <div class="tb-cell"><p class="tb-label">Sheets</p><p class="tb-value">Dashboard · Calculator · Checklist</p></div>
+      <div class="tb-cell"><p class="tb-label">Revision</p><p class="tb-value" id="today-date">—</p></div>
+    </div>
+  </div>
+
+  <div class="sheet-index" role="tablist">
+    <button type="button" class="active" data-panel="dashboard" role="tab" aria-selected="true">SHT 00<span>Dashboard</span></button>
+    <button type="button" data-panel="calculator" role="tab" aria-selected="false">SHT 0A<span>Loan calculator</span></button>
+    <button type="button" data-panel="checklist" role="tab" aria-selected="false">SHT 01–07<span>Checklist</span></button>
+  </div>
+
+  <!-- ===================== DASHBOARD ===================== -->
+  <section class="panel active" id="panel-dashboard">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-id"><span class="card-num">SHT 00</span><h2 class="card-title">Dashboard</h2></div>
       </div>
-      <div class="tb-cell">
-        <p class="tb-label">Sheets</p>
-        <p class="tb-value">01–07</p>
-      </div>
-      <div class="tb-cell">
-        <p class="tb-label">Revision</p>
-        <p class="tb-value" id="today-date">—</p>
+      <div class="card-body">
+        <p class="ruler-label" style="margin-bottom:10px;">Property &amp; loan, from sheet 0A</p>
+        <div class="metric-grid">
+          <div class="metric"><p class="m-label">Property price</p><p class="m-value" id="db-price">—</p></div>
+          <div class="metric"><p class="m-label">Loan amount</p><p class="m-value" id="db-loan">—</p></div>
+          <div class="metric"><p class="m-label">Monthly EMI</p><p class="m-value" id="db-emi">—</p></div>
+          <div class="metric accent"><p class="m-label">Income needed</p><p class="m-value" id="db-income">—</p></div>
+          <div class="metric"><p class="m-label">Upfront cash needed</p><p class="m-value" id="db-upfront">—</p></div>
+          <div class="metric green"><p class="m-label">Loan closes in</p><p class="m-value" id="db-closure">—</p></div>
+        </div>
+
+        <div class="compare-block">
+          <div class="compare-row">
+            <div class="ruler-label"><span>Without extra prepayment</span><span id="db-base-months">—</span></div>
+            <div class="ruler"><div class="ruler-fill" id="db-bar-base" style="width:100%;"></div></div>
+          </div>
+          <div class="compare-row">
+            <div class="ruler-label"><span>With extra annual prepayment</span><span id="db-extra-months">—</span></div>
+            <div class="ruler"><div class="ruler-fill green" id="db-bar-extra" style="width:100%;"></div></div>
+          </div>
+          <p class="hint" id="db-savings-line">—</p>
+        </div>
+
+        <div class="ruler-row">
+          <div class="ruler-top">
+            <span class="ruler-label">Checklist progress</span>
+            <span class="ruler-count"><span id="db-check-done">0</span>/<span id="db-check-total">0</span> verified</span>
+          </div>
+          <div class="ruler"><div class="ruler-fill" id="db-check-fill"></div></div>
+        </div>
       </div>
     </div>
-    <div class="ruler-row">
+  </section>
+
+  <!-- ===================== CALCULATOR ===================== -->
+  <section class="panel" id="panel-calculator">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-id"><span class="card-num">SHT 0A</span><h2 class="card-title">Loan &amp; prepayment calculator</h2></div>
+      </div>
+      <div class="card-body">
+
+        <div class="slider-row">
+          <label for="c-price">Property price</label>
+          <input type="range" min="150" max="280" step="5" value="180" id="c-price">
+          <span class="out" id="c-price-out">—</span>
+        </div>
+        <div class="slider-row">
+          <label for="c-dp">Down payment</label>
+          <input type="range" min="25" max="70" step="5" value="35" id="c-dp">
+          <span class="out" id="c-dp-out">—</span>
+        </div>
+        <div class="slider-row">
+          <label for="c-tenure">Loan tenure</label>
+          <input type="range" min="5" max="20" step="1" value="10" id="c-tenure">
+          <span class="out" id="c-tenure-out">—</span>
+        </div>
+        <div class="slider-row">
+          <label for="c-rate">Interest rate</label>
+          <input type="range" min="75" max="100" step="5" value="85" id="c-rate">
+          <span class="out" id="c-rate-out">—</span>
+        </div>
+        <div class="slider-row">
+          <label for="c-foir">Comfortable EMI/income</label>
+          <input type="range" min="30" max="50" step="5" value="40" id="c-foir">
+          <span class="out" id="c-foir-out">—</span>
+        </div>
+        <div class="mode-toggle" role="group" aria-label="Extra prepayment mode">
+          <button type="button" class="mode-btn active" id="mode-amount" data-mode="amount">Fixed amount</button>
+          <button type="button" class="mode-btn" id="mode-emi" data-mode="emi">Extra EMIs / year</button>
+        </div>
+
+        <div class="slider-row" id="row-amount">
+          <label for="c-extra">Extra prepayment / year</label>
+          <input type="range" min="0" max="500000" step="10000" value="100000" id="c-extra">
+          <span class="out" id="c-extra-out">—</span>
+        </div>
+
+        <div class="slider-row" id="row-emi" style="display:none;">
+          <label for="c-extra-emi">Extra EMIs / year</label>
+          <input type="range" min="0" max="4" step="0.5" value="1" id="c-extra-emi">
+          <span class="out" id="c-extra-emi-out">—</span>
+        </div>
+
+        <p class="hint" id="extra-mode-hint">Extra prepayment is applied as one lump sum at the end of each loan year, going straight to principal.</p>
+
+        <div class="metric-grid" style="margin-bottom:6px;">
+          <div class="metric"><p class="m-label">Loan amount</p><p class="m-value" id="c-loan-out">—</p></div>
+          <div class="metric"><p class="m-label">Monthly EMI</p><p class="m-value" id="c-emi-out">—</p></div>
+          <div class="metric accent"><p class="m-label">Income needed/month</p><p class="m-value" id="c-income-out">—</p></div>
+          <div class="metric"><p class="m-label">Upfront cash needed</p><p class="m-value" id="c-upfront-out">—</p></div>
+        </div>
+
+        <div class="compare-block">
+          <div class="compare-row">
+            <div class="ruler-label"><span>Closes in (no prepayment) — interest paid</span><span id="c-base-line">—</span></div>
+            <div class="ruler"><div class="ruler-fill" id="c-bar-base" style="width:100%;"></div></div>
+          </div>
+          <div class="compare-row">
+            <div class="ruler-label"><span>Closes in (with prepayment) — interest paid</span><span id="c-extra-line">—</span></div>
+            <div class="ruler"><div class="ruler-fill green" id="c-bar-extra" style="width:100%;"></div></div>
+          </div>
+          <p class="hint" id="c-savings-line" style="margin-top:2px;">—</p>
+        </div>
+
+        <p class="hint" style="margin-top:4px;">Upfront cash = down payment + ~11% Tamil Nadu stamp duty/registration + ₹2L misc costs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHECKLIST ===================== -->
+  <section class="panel" id="panel-checklist">
+    <div class="ruler-row" style="margin:0 0 18px;">
       <div class="ruler-top">
-        <span class="ruler-label">Overall progress</span>
+        <span class="ruler-label">Overall checklist progress</span>
         <span class="ruler-count"><span id="overall-done">0</span>/<span id="overall-total">0</span></span>
       </div>
       <div class="ruler"><div class="ruler-fill" id="overall-fill"></div></div>
     </div>
-  </div>
-
-  <div id="sheets"></div>
-
-  <div class="foot">
-    <span>Checks are saved in this browser only.</span>
-    <button id="reset-btn" type="button">Reset all checks</button>
-  </div>
+    <div id="sheets"></div>
+    <div class="foot">
+      <span>Checks are saved in this browser only.</span>
+      <button id="reset-btn" type="button">Reset all checks</button>
+    </div>
+  </section>
 
 </div>
 
 <script>
+/* ---------------- Tab switching ---------------- */
+document.querySelectorAll('.sheet-index button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sheet-index button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+  });
+});
+
+document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+
+/* ---------------- Formatting helpers ---------------- */
+function fmtCr(lakhs){ return lakhs >= 100 ? '₹' + (lakhs/100).toFixed(2) + 'Cr' : '₹' + lakhs.toFixed(1) + 'L'; }
+function fmtRupee(v){ return v >= 100000 ? '₹' + (v/100000).toFixed(2) + 'L' : '₹' + Math.round(v).toLocaleString('en-IN'); }
+function fmtMonths(m){
+  const y = Math.floor(m/12), mo = m % 12;
+  if(y === 0) return mo + ' mo';
+  if(mo === 0) return y + ' yr';
+  return y + ' yr ' + mo + ' mo';
+}
+
+/* ---------------- Loan math ---------------- */
+function emiCalc(loan, ratePct, tenureMonths){
+  const r = ratePct/12/100;
+  return loan * r * Math.pow(1+r, tenureMonths) / (Math.pow(1+r, tenureMonths) - 1);
+}
+function simulateClosure(loan, ratePct, emi, extraAnnual){
+  const r = ratePct/12/100;
+  let balance = loan, month = 0, totalInterest = 0;
+  const maxMonths = 600;
+  while(balance > 1 && month < maxMonths){
+    month++;
+    const interest = balance * r;
+    let principal = emi - interest;
+    if(principal > balance) principal = balance;
+    balance -= principal;
+    totalInterest += interest;
+    if(extraAnnual > 0 && month % 12 === 0 && balance > 0){
+      const extra = Math.min(extraAnnual, balance);
+      balance -= extra;
+    }
+  }
+  return { months: month, totalInterest: totalInterest };
+}
+
+const sliders = ['c-price','c-dp','c-tenure','c-rate','c-foir','c-extra','c-extra-emi'];
+let lastResult = {};
+let extraMode = 'amount';
+
+document.getElementById('mode-amount').addEventListener('click', () => setExtraMode('amount'));
+document.getElementById('mode-emi').addEventListener('click', () => setExtraMode('emi'));
+
+function setExtraMode(mode){
+  extraMode = mode;
+  document.getElementById('mode-amount').classList.toggle('active', mode === 'amount');
+  document.getElementById('mode-emi').classList.toggle('active', mode === 'emi');
+  document.getElementById('row-amount').style.display = mode === 'amount' ? 'flex' : 'none';
+  document.getElementById('row-emi').style.display = mode === 'emi' ? 'flex' : 'none';
+  updateCalculator();
+}
+
+function updateCalculator(){
+  const price = parseFloat(document.getElementById('c-price').value);     // lakhs
+  const dpPct = parseFloat(document.getElementById('c-dp').value);
+  const tenureYears = parseFloat(document.getElementById('c-tenure').value);
+  const rate = parseFloat(document.getElementById('c-rate').value) / 10;
+  const foir = parseFloat(document.getElementById('c-foir').value);
+  const extraAmountInput = parseFloat(document.getElementById('c-extra').value);   // rupees
+  const extraEmiCount = parseFloat(document.getElementById('c-extra-emi').value);  // count
+
+  document.getElementById('c-price-out').textContent = fmtCr(price);
+  document.getElementById('c-dp-out').textContent = dpPct + '%';
+  document.getElementById('c-tenure-out').textContent = tenureYears + ' yrs';
+  document.getElementById('c-rate-out').textContent = rate.toFixed(1) + '%';
+  document.getElementById('c-foir-out').textContent = foir + '%';
+  document.getElementById('c-extra-out').textContent = '₹' + extraAmountInput.toLocaleString('en-IN');
+
+  const dpAmt = price * dpPct / 100;          // lakhs
+  const loanLakhs = price - dpAmt;            // lakhs
+  const loanRupees = loanLakhs * 100000;
+  const tenureMonths = tenureYears * 12;
+  const emi = emiCalc(loanRupees, rate, tenureMonths);
+
+  document.getElementById('c-extra-emi-out').textContent = extraEmiCount.toFixed(1) + ' EMI · ' + fmtRupee(extraEmiCount * emi) + '/yr';
+
+  const extraAnnual = extraMode === 'amount' ? extraAmountInput : extraEmiCount * emi;
+  document.getElementById('extra-mode-hint').textContent = extraMode === 'amount'
+    ? 'Extra prepayment is applied as one lump sum at the end of each loan year, going straight to principal.'
+    : 'Each extra EMI is costed at the current monthly EMI of ' + fmtRupee(emi) + ', applied as a lump sum at the end of each loan year.';
+
+  const base = simulateClosure(loanRupees, rate, emi, 0);
+  const withExtra = simulateClosure(loanRupees, rate, emi, extraAnnual);
+
+  const incomeNeeded = emi / (foir/100);
+  const stampDuty = price * 0.11;
+  const upfront = dpAmt + stampDuty + 2;
+
+  document.getElementById('c-loan-out').textContent = fmtCr(loanLakhs);
+  document.getElementById('c-emi-out').textContent = fmtRupee(emi);
+  document.getElementById('c-income-out').textContent = fmtRupee(incomeNeeded);
+  document.getElementById('c-upfront-out').textContent = fmtCr(upfront);
+
+  document.getElementById('c-base-line').textContent = fmtMonths(base.months) + ' · ' + fmtRupee(base.totalInterest) + ' interest';
+  document.getElementById('c-extra-line').textContent = fmtMonths(withExtra.months) + ' · ' + fmtRupee(withExtra.totalInterest) + ' interest';
+  document.getElementById('c-bar-base').style.width = '100%';
+  document.getElementById('c-bar-extra').style.width = Math.max(8, (withExtra.months / base.months * 100)) + '%';
+
+  const monthsSaved = base.months - withExtra.months;
+  const interestSaved = base.totalInterest - withExtra.totalInterest;
+  document.getElementById('c-savings-line').textContent = extraAnnual > 0
+    ? 'Paying ' + fmtRupee(extraAnnual) + ' extra each year closes the loan ' + fmtMonths(monthsSaved) + ' earlier and saves ' + fmtRupee(interestSaved) + ' in interest.'
+    : 'Set an extra prepayment above to see how much earlier you could close the loan.';
+
+  lastResult = { price, dpAmt, loanLakhs, emi, incomeNeeded, upfront, base, withExtra, extraAnnual, monthsSaved, interestSaved };
+  updateDashboard();
+}
+
+function updateDashboard(){
+  if(!lastResult.price) return;
+  document.getElementById('db-price').textContent = fmtCr(lastResult.price);
+  document.getElementById('db-loan').textContent = fmtCr(lastResult.loanLakhs);
+  document.getElementById('db-emi').textContent = fmtRupee(lastResult.emi);
+  document.getElementById('db-income').textContent = fmtRupee(lastResult.incomeNeeded);
+  document.getElementById('db-upfront').textContent = fmtCr(lastResult.upfront);
+  document.getElementById('db-closure').textContent = fmtMonths(lastResult.withExtra.months);
+
+  document.getElementById('db-base-months').textContent = fmtMonths(lastResult.base.months);
+  document.getElementById('db-extra-months').textContent = fmtMonths(lastResult.withExtra.months);
+  document.getElementById('db-bar-base').style.width = '100%';
+  document.getElementById('db-bar-extra').style.width = Math.max(8, (lastResult.withExtra.months / lastResult.base.months * 100)) + '%';
+  document.getElementById('db-savings-line').textContent = lastResult.extraAnnual > 0
+    ? 'Closing ' + fmtMonths(lastResult.monthsSaved) + ' earlier, saving ' + fmtRupee(lastResult.interestSaved) + ' in interest.'
+    : 'No extra prepayment set — adjust it on sheet 0A.';
+
+  document.getElementById('db-check-done').textContent = document.getElementById('overall-done').textContent;
+  document.getElementById('db-check-total').textContent = document.getElementById('overall-total').textContent;
+  document.getElementById('db-check-fill').style.width = document.getElementById('overall-fill').style.width;
+}
+
+sliders.forEach(id => document.getElementById(id).addEventListener('input', updateCalculator));
+
+/* ---------------- Checklist ---------------- */
 const DATA = [
-  {
-    title: "Title & legal verification",
-    items: [
+  { title: "Title & legal verification", items: [
       "Mother deed traced back at least 30 years, with an unbroken chain of ownership",
       "Encumbrance Certificate (EC) for the last 30 years, free of liens or mortgages",
       "Patta and chitta / adangal land records match the seller's name",
@@ -333,21 +468,15 @@ const DATA = [
       "Occupancy Certificate (OC) and Completion Certificate (CC) issued",
       "No pending litigation, court stay, or land acquisition notice on the property",
       "Property tax paid up to date, no outstanding dues with corporation or panchayat"
-    ]
-  },
-  {
-    title: "Builder & developer due diligence",
-    items: [
+  ]},
+  { title: "Builder & developer due diligence", items: [
       "Builder's past 2–3 projects visited in person, delivery timelines checked against promises",
       "Builder's financial standing and any loan defaults or insolvency filings checked",
       "RERA complaints or litigation history against the builder searched",
       "No-objection certificate from the project's lender obtained, if under construction",
       "Sample or model flat inspected, matches brochure specifications and finishes"
-    ]
-  },
-  {
-    title: "Financial & cost checklist",
-    items: [
+  ]},
+  { title: "Financial & cost checklist", items: [
       "All-in cost worked out: base price + GST + stamp duty + registration + parking + corpus fund",
       "Carpet, built-up and super built-up areas clearly stated and match the RERA carpet area",
       "Bank's own valuation of the property cross-checked against the builder's quoted price",
@@ -355,11 +484,8 @@ const DATA = [
       "Payment schedule reviewed against actual construction stage, not just calendar dates",
       "Hidden charges identified: maintenance deposit, infrastructure charge, club membership",
       "EMI checked against monthly budget, with room for a rate increase of 1–1.5%"
-    ]
-  },
-  {
-    title: "Construction & site inspection",
-    items: [
+  ]},
+  { title: "Construction & site inspection", items: [
       "Structural quality checked on-site: cracks, seepage, wall alignment, floor levelling",
       "Water supply source confirmed: CMWSSB connection, borewell, or tanker dependency",
       "Sewage and rainwater drainage system inspected, including monsoon performance",
@@ -367,11 +493,8 @@ const DATA = [
       "Fire safety in place: extinguishers, sprinklers, marked emergency exits",
       "Lift count and capacity adequate for the number of units in the block",
       "Parking allocation — covered or open, number of slots — matches the agreement"
-    ]
-  },
-  {
-    title: "Location & infrastructure",
-    items: [
+  ]},
+  { title: "Location & infrastructure", items: [
       "Flood-vulnerability checked against CMDA / Greater Chennai Corporation maps",
       "Groundwater table and soil quality checked, especially for low-lying OMR pockets",
       "Commute time to workplace measured in peak traffic, not just off-peak",
@@ -379,100 +502,66 @@ const DATA = [
       "Upcoming infrastructure — metro phases, road widening — checked in the CMDA master plan",
       "Mobile network and broadband signal strength verified on-site",
       "Resale and rental demand checked for the immediate street, not just the OMR brand name"
-    ]
-  },
-  {
-    title: "Documentation before registration",
-    items: [
+  ]},
+  { title: "Documentation before registration", items: [
       "Sale agreement clauses reviewed: possession date, delay penalty, exit clause",
       "Indemnity and warranty clauses for construction defects included",
       "Society or association bylaws reviewed, if buying into a ready complex",
       "Khata / patta transfer process confirmed in writing with the seller or builder",
       "Stamp duty and registration calculated on the guideline value, not just the sale price",
       "Independent lawyer's title opinion obtained, separate from the builder's panel lawyer"
-    ]
-  },
-  {
-    title: "Post-purchase",
-    items: [
+  ]},
+  { title: "Post-purchase", items: [
       "Property registered and khata / patta mutated into your name",
       "Electricity (TANGEDCO) and water (CMWSSB) connections transferred",
       "Home insurance taken out for structure and contents",
       "Possession letter and snag list signed off before the final payment is released",
       "Maintenance agreement and corpus fund handover documented in writing"
-    ]
-  }
+  ]}
 ];
 
 const sheetsEl = document.getElementById('sheets');
 const STORAGE_KEY = 'flat-checklist-v1';
 let state = {};
 try{ state = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ state = {}; }
+function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
 
-function save(){
-  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-}
-
-function render(){
+function renderChecklist(){
   sheetsEl.innerHTML = '';
-  let totalAll = 0, doneAll = 0;
-
   DATA.forEach((sheet, sIdx) => {
     const sheetNum = String(sIdx + 1).padStart(2, '0');
-    const section = document.createElement('section');
-    section.className = 'sheet';
+    const section = document.createElement('div');
+    section.className = 'card';
     section.id = 'sheet-' + sheetNum;
-
-    const header = document.createElement('div');
-    header.className = 'sheet-header';
-    header.innerHTML = `
-      <div class="sheet-id">
-        <span class="sheet-num">SHT ${sheetNum}</span>
-        <h2 class="sheet-title">${sheet.title}</h2>
+    section.innerHTML = `
+      <div class="card-header">
+        <div class="card-id"><span class="card-num">SHT ${sheetNum}</span><h2 class="card-title">${sheet.title}</h2></div>
+        <span class="card-tally" data-tally></span>
       </div>
-      <span class="sheet-tally" data-tally></span>
+      <span class="stamp">VERIFIED</span>
+      <div class="card-body" data-body></div>
     `;
-    section.appendChild(header);
-
-    const stamp = document.createElement('span');
-    stamp.className = 'stamp';
-    stamp.textContent = 'VERIFIED';
-    section.appendChild(stamp);
-
-    const body = document.createElement('div');
-    body.className = 'sheet-body';
-
+    const body = section.querySelector('[data-body]');
     sheet.items.forEach((text, iIdx) => {
       const key = sheetNum + '-' + iIdx;
       const row = document.createElement('div');
-      row.className = 'item';
+      row.className = 'item' + (state[key] ? ' checked' : '');
       const cbId = 'cb-' + key;
-      row.innerHTML = `
-        <input type="checkbox" id="${cbId}" ${state[key] ? 'checked' : ''}>
-        <label for="${cbId}">${text}</label>
-      `;
-      if(state[key]) row.classList.add('checked');
-      const checkbox = row.querySelector('input');
-      checkbox.addEventListener('change', () => {
-        state[key] = checkbox.checked;
-        row.classList.toggle('checked', checkbox.checked);
-        save();
-        updateCounts();
+      row.innerHTML = `<input type="checkbox" id="${cbId}" ${state[key] ? 'checked' : ''}><label for="${cbId}">${text}</label>`;
+      row.querySelector('input').addEventListener('change', e => {
+        state[key] = e.target.checked;
+        row.classList.toggle('checked', e.target.checked);
+        saveState();
+        updateChecklistCounts();
       });
       body.appendChild(row);
-      totalAll++;
-      if(state[key]) doneAll++;
     });
-
-    section.appendChild(body);
     sheetsEl.appendChild(section);
   });
-
-  document.getElementById('overall-total').textContent = totalAll;
-  updateCounts();
+  updateChecklistCounts();
 }
 
-function updateCounts(){
+function updateChecklistCounts(){
   let totalAll = 0, doneAll = 0;
   DATA.forEach((sheet, sIdx) => {
     const sheetNum = String(sIdx + 1).padStart(2, '0');
@@ -486,21 +575,19 @@ function updateCounts(){
     section.querySelector('[data-tally]').textContent = done + ' / ' + sheet.items.length + ' verified';
     section.classList.toggle('complete', done === sheet.items.length);
   });
+  document.getElementById('overall-total').textContent = totalAll;
   document.getElementById('overall-done').textContent = doneAll;
   document.getElementById('overall-fill').style.width = (totalAll ? (doneAll/totalAll*100) : 0) + '%';
+  updateDashboard();
 }
 
 document.getElementById('reset-btn').addEventListener('click', () => {
-  if(confirm('Clear all checked items?')){
-    state = {};
-    save();
-    render();
-  }
+  if(confirm('Clear all checked items?')){ state = {}; saveState(); renderChecklist(); }
 });
 
-document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
-
-render();
+/* ---------------- Init ---------------- */
+renderChecklist();
+updateCalculator();
 </script>
 </body>
 </html>
