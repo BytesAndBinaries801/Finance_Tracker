@@ -1,59 +1,71 @@
-# Ledger — Monthly Finance Tracker
+# Central OMR Flat — Affordability Calculator
 
-A single-page finance tracker: log income and expenses, browse by month, and see
-a dashboard with KPIs, an income-vs-expense trend chart, a category donut chart,
-and a spreadsheet-style monthly summary table. All amounts are in ₹ (INR).
+An interactive, single-file calculator for estimating the cost of buying a flat in Central OMR, Chennai. Includes a pre-purchase checklist.
 
-**Live site:** `https://<your-username>.github.io/<repo-name>/` (once Pages is enabled — see below)
+**Live demo:** `https://<your-username>.github.io/<repo-name>/`
 
-## How your data works
+---
 
-This is a static page — there's no database and no server. Entries you add are
-saved in your **browser's local storage**, on whichever device/browser you're
-using. They are *not* uploaded anywhere, and they are *not* stored in this repo.
+## Features
 
-To back your data up or move it to another device:
-- Click **Export JSON** in the tracker → save the file → commit it to this repo
-  if you want it versioned (e.g. as `data/ledger-data.json`), or keep it elsewhere
-  if you'd rather not put real numbers in a public repo.
-- Click **Import JSON** on any device to restore from that file.
+- Adjust property price, down payment %, loan tenure, interest rate, and EMI/income ratio
+- Instantly see: loan amount, monthly EMI, income required, total upfront cash, and total interest
+- 20-item pre-purchase checklist across Legal, Financial, Builder, and Location categories
+- Dark mode support
+- Fully responsive (mobile-friendly)
+- Zero dependencies — plain HTML, CSS, JavaScript
 
-> Heads up: this repo is **public**, since GitHub Pages on the free plan only
-> serves sites from public repos. The page's code being public is harmless —
-> your actual numbers live in your browser, not in this code. Just be mindful
-> about whether you ever commit an exported `ledger-data.json` here, since that
-> file *would* contain real numbers.
+---
 
-## Publishing this with GitHub Pages
+## Publishing to GitHub Pages (5 minutes)
 
-Following GitHub's own [Pages quickstart](https://docs.github.com/en/pages/quickstart):
+### Option 1 — New repository
 
-1. Push this repo to GitHub (see commands below).
-2. On GitHub, go to **Settings → Pages**.
-3. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-4. Under **Branch**, select `main` and folder `/ (root)`, then **Save**.
-5. Wait a few minutes, then visit `https://<your-username>.github.io/<repo-name>/`.
+1. Go to [github.com/new](https://github.com/new)
+2. Name it e.g. `omr-calculator` — keep it public
+3. Upload `index.html` to the root of the repo
+4. Go to **Settings → Pages**
+5. Under **Source**, select `Deploy from a branch`
+6. Choose `main` branch, `/ (root)` folder → **Save**
+7. Your site will be live at `https://<username>.github.io/omr-calculator/` in ~1 minute
 
-## Pushing this folder to GitHub
+### Option 2 — GitHub CLI
 
 ```bash
-cd path/to/this/folder
 git init
-git branch -M main
-git add .
-git commit -m "Initial commit: finance tracker"
-git remote add origin https://github.com/<your-username>/<repo-name>.git
-git push -u origin main
+git add index.html README.md
+git commit -m "Initial commit: OMR affordability calculator"
+gh repo create omr-calculator --public --push --source=.
+# Then enable Pages in Settings → Pages
 ```
 
-## Updating the tracker later
+---
 
-Replace `index.html` with the new version, then:
+## Customising
 
-```bash
-git add index.html
-git commit -m "Update tracker"
-git push
+All parameters live in `index.html`. Key things you may want to change:
+
+| What | Where in the file |
+|------|-------------------|
+| Price slider range (₹Cr) | `min="150" max="280"` on the `#price` input |
+| Default down payment | `value="35"` on `#dp` |
+| Stamp duty % | `price * 0.11` in the `calc()` function |
+| Misc upfront costs | `+ 2` (₹2L) in the `calc()` function |
+| Checklist items | `SECTIONS` array in the `<script>` block |
+
+---
+
+## Files
+
+```
+index.html   ← the entire app (calculator + checklist)
+README.md    ← this file
 ```
 
-GitHub Pages will redeploy automatically (usually within a few minutes).
+---
+
+## Notes
+
+- Stamp duty is estimated at **11%** (TN registration + stamp duty combined). Verify the current rate for your transaction.
+- EMI formula used: standard reducing-balance (P × r × (1+r)^n) / ((1+r)^n − 1)
+- Checklist state is not saved between page reloads (no server or localStorage needed)
